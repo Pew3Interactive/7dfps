@@ -123,6 +123,7 @@ function enemyHit(obj,subevent,id,tick) {
 }
 
 function enemyDie(obj,subevent,id,tick) {
+    obj.event.clearChain();
     script.callParent();
     obj.event.callObjectById(map.object.findPlayer(), "DisplayScoreWon");
     obj.event.chain(50,"gameEnd");

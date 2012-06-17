@@ -5,6 +5,7 @@
 
 script.implements('enemy_base');
 script.attachEvent(DIM3_EVENT_CONSTRUCT,"enemyConstruct");
+script.attachEvent(DIM3_EVENT_DIE,"enemyDie");
 
 const HEALTH_BASE = 50;
 const BOUNTY = 500;
@@ -58,4 +59,9 @@ function startFire(obj,tick) { // fires for a few seconds? randomly
 	
 	// repeat
 	obj.event.chain(1,"startFire");
+}
+
+function enemyDie(obj,subEvent,id,tick) {
+    obj.event.clearChain();
+    script.callParent();
 }

@@ -5,6 +5,7 @@
 
 script.implements('enemy_base');
 script.attachEvent(DIM3_EVENT_CONSTRUCT,"enemyConstruct");
+script.attachEvent(DIM3_EVENT_ENEMY_DIE,"enemyDie");
 
 const HEALTH_BASE = 100;
 const BOUNTY = 2000;
@@ -108,4 +109,9 @@ function fireGrenade(obj,tick) { // Fire 4 grenades in quick succession
     
     // TODO: Lights and Sounds
     
+}
+
+function enemyDie(obj,subevent,id,tick) {
+    obj.event.clearChain();
+    script.callParent();
 }
