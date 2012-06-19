@@ -5,7 +5,7 @@
 
 script.implements('enemy_base');
 script.attachEvent(DIM3_EVENT_CONSTRUCT,"enemyConstruct");
-script.attachEvent(DIM3_EVENT_ENEMY_DIE,"enemyDie");
+script.attachEvent(DIM3_EVENT_DIE,"enemyDie");
 
 const HEALTH_BASE = 100;
 const BOUNTY = 2000;
