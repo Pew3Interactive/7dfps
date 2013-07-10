@@ -1,10 +1,11 @@
 ﻿<Properties>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/MouseLookControl.js">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/WalkControl.js">
     <Files>
       <File FileName="Assets/FootResponder.js" Line="2" Column="1" />
-      <File FileName="Assets/WalkControl.js" Line="30" Column="2" />
-      <File FileName="Assets/MouseLookControl.js" Line="10" Column="46" />
+      <File FileName="Assets/WalkControl.js" Line="31" Column="47" />
+      <File FileName="Assets/MouseLookControl.js" Line="16" Column="4" />
+      <File FileName="../../../../Games/WoGaDeMo2013/Assets/MouseLook.cs" Line="1" Column="1" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
