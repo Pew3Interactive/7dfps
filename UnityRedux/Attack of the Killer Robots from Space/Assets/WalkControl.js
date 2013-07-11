@@ -8,12 +8,15 @@ public var CameraSpringConstant : float;
 public var WalkBobHeadTiltMaximumAngle : float;
 public var WalkBobCycleInterval : float;
 public var JumpImpulse : float;
+public var MovementImpulseCurve : AnimationCurve;
+public var HeadBobScaleCurve : AnimationCurve;
 
 private var RemainingTimeUntilNextStepIsAllowed : float;
 private var RemainingTimeOfWalkBobCycle : float;
 private var LiftedFootIndex : int = 1;
 private var WasWalkingLastUpdate : boolean = false;
 private var FakePosition : Vector3;
+private var TimeSpentWalking : double;
 
 function Start () 
 {
@@ -37,9 +40,12 @@ function Update ()
 			var rightwardImpulse = Input.GetAxis("Horizontal") * MovementImpulse;
 			if(rightwardImpulse != 0 || forwardImpulse != 0)
 			{
-				var impulse = Quaternion.AngleAxis(transform.localEulerAngles.y, Vector3.up) * Vector3(rightwardImpulse, FootLiftImpulse, forwardImpulse);
-				Foot.rigidbody.AddForce(impulse, ForceMode.Impulse);
 				justStartedWalking = !WasWalkingLastUpdate;
+				if(justStartedWalking) TimeSpentWalking = 0;
+				else TimeSpentWalking += StepInterval;
+				var scaleFactor = MovementImpulseCurve.Evaluate(TimeSpentWalking);
+				var impulse = Quaternion.AngleAxis(transform.localEulerAngles.y, Vector3.up) * Vector3(rightwardImpulse * scaleFactor, FootLiftImpulse, forwardImpulse * scaleFactor);
+				Foot.rigidbody.AddForce(impulse, ForceMode.Impulse);
 				WasWalkingLastUpdate = true;
 				RemainingTimeUntilNextStepIsAllowed = StepInterval;
 			}
@@ -66,7 +72,7 @@ function Update ()
 	}
 	
 	var interpolationFactor : float = Mathf.Sin(3.14159 * Mathf.Clamp(RemainingTimeOfWalkBobCycle, 0, WalkBobCycleInterval) / WalkBobCycleInterval);
-	transform.localEulerAngles.z = LiftedFootIndex * WalkBobHeadTiltMaximumAngle * interpolationFactor;
+	transform.localEulerAngles.z = HeadBobScaleCurve.Evaluate(TimeSpentWalking) * LiftedFootIndex * WalkBobHeadTiltMaximumAngle * interpolationFactor;
 	
 	//Now we update the camera, but a bit delayed
 	transform.position = Foot.rigidbody.position;
