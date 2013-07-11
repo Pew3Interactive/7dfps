@@ -7,37 +7,49 @@ public var Foot : FootResponder;
 public var CameraSpringConstant : float;
 public var WalkBobHeadTiltMaximumAngle : float;
 public var WalkBobCycleInterval : float;
+public var JumpImpulse : float;
 
 private var RemainingTimeUntilNextStepIsAllowed : float;
 private var RemainingTimeOfWalkBobCycle : float;
 private var LiftedFootIndex : int = 1;
 private var WasWalkingLastUpdate : boolean = false;
+private var FakePosition : Vector3;
 
 function Start () 
 {
 	RemainingTimeUntilNextStepIsAllowed = 0;
 	RemainingTimeOfWalkBobCycle = 0;
 	WasWalkingLastUpdate = false;
+	FakePosition = transform.position;
 }
 
 function Update () 
 {
+
 	var justStartedWalking : boolean = false;
 	
 	RemainingTimeUntilNextStepIsAllowed -= Time.deltaTime;
-	if(RemainingTimeUntilNextStepIsAllowed < 0 && Foot.IsOnWalkableSurface)
+	if(Foot.IsOnWalkableSurface)
 	{
-		var forwardImpulse = Input.GetAxis("Vertical") * MovementImpulse;
-		var rightwardImpulse = Input.GetAxis("Horizontal") * MovementImpulse;
-		if(rightwardImpulse != 0 || forwardImpulse != 0)
+		if(RemainingTimeUntilNextStepIsAllowed < 0 && Foot.IsOnWalkableSurface)
 		{
-			var impulse = Quaternion.AngleAxis(transform.localEulerAngles.y, Vector3.up) * Vector3(rightwardImpulse, FootLiftImpulse, forwardImpulse);
-			Foot.rigidbody.AddForce(impulse, ForceMode.Impulse);
-			justStartedWalking = !WasWalkingLastUpdate;
-			WasWalkingLastUpdate = true;
-			RemainingTimeUntilNextStepIsAllowed = StepInterval;
+			var forwardImpulse = Input.GetAxis("Vertical") * MovementImpulse;
+			var rightwardImpulse = Input.GetAxis("Horizontal") * MovementImpulse;
+			if(rightwardImpulse != 0 || forwardImpulse != 0)
+			{
+				var impulse = Quaternion.AngleAxis(transform.localEulerAngles.y, Vector3.up) * Vector3(rightwardImpulse, FootLiftImpulse, forwardImpulse);
+				Foot.rigidbody.AddForce(impulse, ForceMode.Impulse);
+				justStartedWalking = !WasWalkingLastUpdate;
+				WasWalkingLastUpdate = true;
+				RemainingTimeUntilNextStepIsAllowed = StepInterval;
+			}
+			else WasWalkingLastUpdate = false;
 		}
-		else WasWalkingLastUpdate = false;
+	
+		if(Input.GetButtonDown("Jump"))
+		{
+			Foot.rigidbody.AddForce(0, JumpImpulse, 0, ForceMode.Impulse);
+		}
 	}
 	
 	RemainingTimeOfWalkBobCycle -= Time.deltaTime;
