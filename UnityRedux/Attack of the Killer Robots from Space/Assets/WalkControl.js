@@ -10,6 +10,7 @@ public var WalkBobCycleInterval : float;
 public var JumpImpulse : float;
 public var MovementImpulseCurve : AnimationCurve;
 public var HeadBobScaleCurve : AnimationCurve;
+public var HeadBobRateScaleCurve : AnimationCurve;
 
 private var RemainingTimeUntilNextStepIsAllowed : float;
 private var RemainingTimeOfWalkBobCycle : float;
@@ -58,7 +59,7 @@ function Update ()
 		}
 	}
 	
-	RemainingTimeOfWalkBobCycle -= Time.deltaTime;
+	RemainingTimeOfWalkBobCycle -= Time.deltaTime * HeadBobRateScaleCurve.Evaluate(TimeSpentWalking);
 	
 	if(WasWalkingLastUpdate && RemainingTimeOfWalkBobCycle < 0) 
 	{
