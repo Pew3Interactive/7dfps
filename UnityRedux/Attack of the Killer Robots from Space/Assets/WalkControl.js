@@ -1,6 +1,7 @@
 #pragma strict
 
 public var MovementImpulse : float;
+public var MovementDampeningFactor : float;
 public var FootLiftImpulse : float;
 public var StepInterval : float;
 public var Foot : FootResponder;
@@ -35,7 +36,7 @@ function Update ()
 	RemainingTimeUntilNextStepIsAllowed -= Time.deltaTime;
 	if(Foot.IsOnWalkableSurface)
 	{
-		if(RemainingTimeUntilNextStepIsAllowed < 0 && Foot.IsOnWalkableSurface)
+		if(RemainingTimeUntilNextStepIsAllowed < 0)
 		{
 			var forwardImpulse = Input.GetAxis("Vertical") * MovementImpulse;
 			var rightwardImpulse = Input.GetAxis("Horizontal") * MovementImpulse;
@@ -52,6 +53,8 @@ function Update ()
 			}
 			else WasWalkingLastUpdate = false;
 		}
+		
+		Foot.rigidbody.AddForce(Vector3.Scale(Vector3(1, 0, 1), -Foot.rigidbody.velocity) * MovementDampeningFactor);
 	
 		if(Input.GetButtonDown("Jump"))
 		{
